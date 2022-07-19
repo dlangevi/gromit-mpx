@@ -276,7 +276,7 @@ gboolean on_buttonpress (GtkWidget *win,
   devdata->lasty = ev->y;
   devdata->firstx = ev->x;
   devdata->firsty = ev->y;
-  data->linebuffer = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, data->width, data->height);
+
   devdata->motion_time = ev->time;
 
   snap_undo_state (data);
