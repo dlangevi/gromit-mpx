@@ -274,6 +274,9 @@ gboolean on_buttonpress (GtkWidget *win,
 
   devdata->lastx = ev->x;
   devdata->lasty = ev->y;
+  devdata->firstx = ev->x;
+  devdata->firsty = ev->y;
+  data->linebuffer = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, data->width, data->height);
   devdata->motion_time = ev->time;
 
   snap_undo_state (data);
@@ -372,7 +375,11 @@ gboolean on_motion (GtkWidget *win,
 
       if(devdata->motion_time > 0)
 	{
-	  draw_line (data, ev->device, devdata->lastx, devdata->lasty, ev->x, ev->y);
+    // Lines only draw on start and finish
+    if (devdata->cur_context->type != GROMIT_LINE)
+    {
+      draw_line (data, ev->device, devdata->lastx, devdata->lasty, ev->x, ev->y);
+    }
 	  coord_list_prepend (data, ev->device, ev->x, ev->y, data->maxwidth);
 	}
     }
@@ -410,6 +417,10 @@ gboolean on_buttonrelease (GtkWidget *win,
       coord_list_get_arrow_param (data, ev->device, width * 3,
 				  &width, &direction))
     draw_arrow (data, ev->device, ev->x, ev->y, width, direction);
+
+  if (devdata->cur_context->type == GROMIT_LINE) {
+    draw_line (data, ev->device, devdata->firstx, devdata->firsty, ev->x, ev->y);
+  }
 
   coord_list_free (data, ev->device);
 

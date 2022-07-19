@@ -63,7 +63,8 @@ typedef enum
 {
   GROMIT_PEN,
   GROMIT_ERASER,
-  GROMIT_RECOLOR
+  GROMIT_RECOLOR,
+  GROMIT_LINE
 } GromitPaintType;
 
 typedef struct
@@ -82,6 +83,8 @@ typedef struct
 {
   gdouble      lastx;
   gdouble      lasty;
+  gdouble      firstx;
+  gdouble      firsty;
   guint32      motion_time;
   GList*       coordlist;
   GdkDevice*   device;
@@ -140,6 +143,7 @@ typedef struct
   gchar       *clientdata;
 
   cairo_surface_t *undobuffer[GROMIT_MAX_UNDO];
+  cairo_surface_t *linebuffer;
   gint            undo_head, undo_depth, redo_depth;
 
   gboolean show_intro_on_startup;
